@@ -1,5 +1,5 @@
 //import heart from '../../../assets/images/heart.png'
-import "./BlockCards.css"
+import "./BlogCard.css"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 

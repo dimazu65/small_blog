@@ -26,10 +26,6 @@ export class BlogContent extends Component {
      localStorage.setItem('blogPosts',JSON.stringify(temp))   
     } 
 
-    
-   
-    
-
     deletePost = pos =>{
        if (window.confirm(`Are you sure to remove ${this.state.blogArr[pos].title} ?`)) { 
        const temp=[...this.state.blogArr]
@@ -46,6 +42,14 @@ export class BlogContent extends Component {
             showAddForm :true
         })
     }
+
+    triggerHideAddForm = () => {
+        this.setState({
+            showAddForm :false
+        })  
+    }
+
+
     render(){
         
         const blogPosts = this.state.blogArr.map((item, pos )=> {
@@ -64,7 +68,7 @@ export class BlogContent extends Component {
             <> 
 
            {
-               this.state.showAddForm ? <AddPostForm /> : null
+               this.state.showAddForm ? <AddPostForm triggerHideAddForm={this.triggerHideAddForm} /> : null
            } 
             
            
