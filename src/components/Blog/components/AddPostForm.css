@@ -36,7 +36,7 @@
 .addFormInput:focus::placeholder {
   color: transparent;
 }
-
+  
 .overlay{
     position: fixed ;
     left: 0;
