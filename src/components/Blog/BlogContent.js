@@ -4,11 +4,17 @@ import { Component } from "react";
 import "./BlogContent.css";
 import { AddPostForm } from "./components/AddPostForm";
 import { BlogCard } from "./components/BlogCard";
+import CircularProgress from '@mui/material/CircularProgress';
+import { Opacity } from "@material-ui/icons";
+import { EditPostForm } from "./components/EditPostForm";
+
 export class BlogContent extends Component {
   state = {
     showAddForm: false,
+    showEditForm : false,
     blogArr: [],
     isPending: false,
+    selectedPost:{},
   };
 
   // Created simple database on mockapi.io
@@ -50,6 +56,27 @@ export class BlogContent extends Component {
         console.log(err);
       });
   };
+  
+  editBlogPost =(updatedBlogPost) => {
+    this.setState({
+      isPending: true,
+    });
+
+    axios
+      .put(`https://615fc6a6f7254d001706820b.mockapi.io/posts/${updatedBlogPost.id}`, updatedBlogPost)
+      .then((response) => {
+       
+          this.getPosts();
+          console.log("Changed", response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    this.setState({
+      isPending: false,
+    });
+  
+  }
 
   deletePost = (blogPost) => {
     if (window.confirm(`Remove ${blogPost.title} ?`)) {
@@ -80,6 +107,17 @@ export class BlogContent extends Component {
       });
   };
 
+  triggerShowEditForm = () => {
+    this.setState({
+      showEditForm: true,
+    });
+  };
+  triggerHideEditForm = () => {
+    this.setState({
+      showEditForm: false,
+    });
+  };
+
   triggerShowAddForm = () => {
     this.setState({
       showAddForm: true,
@@ -96,14 +134,17 @@ export class BlogContent extends Component {
     if (e.key === "Escape" && this.state.showAddForm) this.triggerHideAddForm();
   };
 
-  componentDidMount() {
-    this.getPosts();
-    window.addEventListener("keyup", this.handleEscape);
+  handleSelectPost = (blogPost) => {
+    this.setState({
+       selectedPost:blogPost
+    })
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("keyup", this.handleEscape);
+  componentDidMount() {
+    this.getPosts();
+   
   }
+
   render() {
     const blogPosts = this.state.blogArr.map((item, pos) => {
       return (
@@ -114,9 +155,13 @@ export class BlogContent extends Component {
           liked={item.liked}
           likePost={() => this.likePost(item)}
           deletePost={() => this.deletePost(item)}
+          triggerShowEditForm={this.triggerShowEditForm}
+          handleSelectPost = {() => this.handleSelectPost(item)}
         />
       );
     });
+
+    const postsOpacity = this.state.isPending ? 0.5 : 1
     return (
       <div className="blogPage">
         {this.state.showAddForm && (
@@ -126,6 +171,13 @@ export class BlogContent extends Component {
             triggerHideAddForm={this.triggerHideAddForm}
           />
         )}
+        {this.state.showEditForm && (
+          <EditPostForm
+            triggerHideEditForm={this.triggerHideEditForm}
+            selectedPost={this.state.selectedPost}
+            editBlogPost={this.editBlogPost}
+          />
+        )}
         <>
           <h1>Simple Blog</h1>
           <div className="addNewBtn">
@@ -133,8 +185,13 @@ export class BlogContent extends Component {
               New post
             </button>
           </div>
-          {this.state.isPending && <h2>Updating...</h2>}
-          <div className="posts">{blogPosts}</div>
+          
+          <div className="posts" style={{opacity:postsOpacity}}>
+            {blogPosts}
+          </div>
+          {
+           this.state.isPending && <CircularProgress className="preloader"/>
+          }
         </>
       </div>
     );

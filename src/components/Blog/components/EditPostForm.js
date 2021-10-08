@@ -1,10 +1,10 @@
-import "./AddPostForm.css"
+import "./EditPostForm.css"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Component } from "react";
-export class AddPostForm extends Component {
+export class EditPostForm extends Component {
   state = {
-    postTitle: "",
-    postDesc: "",
+    postTitle: this.props.selectedPost.title,
+    postDesc: this.props.selectedPost.description,
   };
   onChangeTitle = (e) => {
     this.setState({
@@ -16,20 +16,21 @@ export class AddPostForm extends Component {
       postDesc: e.target.value,
     });
   };
-  createPost = (e) => {
+
+  savePost = (e) => {
     e.preventDefault();
     const post = {
+      id: this.props.selectedPost.id,  
       title: this.state.postTitle,
       description: this.state.postDesc,
-      liked: false,
-    };
-
-    this.props.addNewBlogPost(post);
-    this.props.triggerHideAddForm();
+      liked: this.props.selectedPost.liked
+    }
+    this.props.editBlogPost(post);
+    this.props.triggerHideEditForm();
   };
 
   handleEscape = (e) => {
-    if (e.key === "Escape") this.props.triggerHideAddForm();
+    if (e.key === "Escape") this.props.triggerHideEditForm();
   };
 
   componentDidMount() {
@@ -40,18 +41,19 @@ export class AddPostForm extends Component {
   componentWillUnmount() {
     window.removeEventListener("keyup", this.handleEscape);
   }
+
   render() {
-    const triggerHideAddForm = this.props.triggerHideAddForm;
+    const triggerHideEditForm = this.props.triggerHideEditForm;
     return (
       <>
-        <form action="" className="addPostForm" onSubmit={this.createPost}>
-          <h2>New post</h2>
-          <button className="hideBtn" onClick={triggerHideAddForm}>
+        <form action="" className="editPostForm" onSubmit={this.savePost}>
+          <h2>Edit post</h2>
+          <button className="hideBtn" onClick={triggerHideEditForm}>
             <HighlightOffIcon />
           </button>
           <div>
             <input
-              className="addFormInput"
+              className="editFormInput"
               type="text"
               name="pstTitle"
               placeholder="Title"
@@ -62,7 +64,7 @@ export class AddPostForm extends Component {
           </div>
           <div>
             <textarea
-              className="addFormInput"
+              className="editFormInput"
               name="pstDesc"
               placeholder="Description"
               value={this.state.postDesc}
@@ -72,11 +74,11 @@ export class AddPostForm extends Component {
           </div>
           <div>
             <button className="blackBtn" type="submit">
-              Add post
+              Update post
             </button>
           </div>
         </form>
-        <div onClick={triggerHideAddForm} className="overlay"></div>
+        <div onClick={triggerHideEditForm} className="overlay"></div>
       </>
     );
   }
