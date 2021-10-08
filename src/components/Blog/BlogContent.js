@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Component } from "react"
 import { posts } from "../sharedData/dataFile"
 import "./BlogContent.css"
@@ -6,7 +7,28 @@ import { BlogCard } from "./components/BlogCard"
 export class BlogContent extends Component {
   state = {
     showAddForm: false,
-    blogArr: JSON.parse(localStorage.getItem("blogPosts")) || posts,
+    blogArr: [],
+    isPending: false
+  };
+  getPosts = () => {
+    this.setState({
+       isPending:true
+    })
+    // Created simple database on mockapi.io
+    // Will update to Firebase later
+    axios
+      .get("https://615fc6a6f7254d001706820b.mockapi.io/posts")
+      .then((response) => {
+        this.setState({
+          blogArr: response.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      this.setState({
+        isPending:false
+     })  
   };
 
   likePost = (pos) => {
@@ -19,16 +41,19 @@ export class BlogContent extends Component {
     localStorage.setItem("blogPosts", JSON.stringify(temp));
   };
 
-  deletePost = (pos) => {
-    if (window.confirm(`Remove ${this.state.blogArr[pos].title} ?`)) {
-      this.setState((state) => {
-        const temp = [...this.state.blogArr];
-        temp.splice(pos, 1);
-        localStorage.setItem("blogPosts", JSON.stringify(temp));
-        return {
-          blogArr: temp,
-        };
-      });
+  deletePost = (blogPost) => {
+    if (window.confirm(`Remove ${blogPost.title} ?`)) {
+      axios
+        .delete(
+          `https://615fc6a6f7254d001706820b.mockapi.io/posts/${blogPost.id}`
+        )
+        .then((response) => {
+          this.getPosts();
+          console.log("Post erased", response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -58,11 +83,10 @@ export class BlogContent extends Component {
         blogArr: temp,
       };
     });
-
-    this.triggerHideAddForm();
   };
 
   componentDidMount() {
+    this.getPosts();
     window.addEventListener("keyup", this.handleEscape);
   }
 
@@ -78,18 +102,19 @@ export class BlogContent extends Component {
           description={item.description}
           liked={item.liked}
           likePost={() => this.likePost(pos)}
-          deletePost={() => this.deletePost(pos)}
+          deletePost={() => this.deletePost(item)}
         />
       );
     });
     return (
       <div className="blogPage">
-        {this.state.showAddForm ? (
+        {this.state.showAddForm && (
           <AddPostForm
             blogArr={this.state.blogArr}
             addNewBlogPost={this.addNewBlogPost}
+            triggerHideAddForm={this.triggerHideAddForm}
           />
-        ) : null}
+        )}
         <>
           <h1>Simple Blog</h1>
           <div className="addNewBtn">
@@ -97,6 +122,9 @@ export class BlogContent extends Component {
               New post
             </button>
           </div>
+          {
+            this.state.isPending && <h2>Updating...</h2>
+          }
           <div className="posts">{blogPosts}</div>
         </>
       </div>

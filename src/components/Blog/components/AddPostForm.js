@@ -16,7 +16,8 @@ export class AddPostForm extends Component {
         postDesc: e.target.value
     }) 
   }
-  createPost = () => {
+  createPost = (e) => {
+    e.preventDefault()
       const post ={
         id: this.props.blogArr.length + 1,
         title: this.state.postTitle,
@@ -25,12 +26,13 @@ export class AddPostForm extends Component {
       }
       
       this.props.addNewBlogPost(post)
+      this.props.triggerHideAddForm()
   }
  render() {
     const triggerHideAddForm = this.props.triggerHideAddForm 
     return (
         <>
-          <form action="" className="addPostForm">
+          <form action="" className="addPostForm" onSubmit={this.createPost} >
                <h2>New post</h2>
                <button className="hideBtn" onClick={triggerHideAddForm}>
                    <HighlightOffIcon />
@@ -43,6 +45,7 @@ export class AddPostForm extends Component {
                     placeholder="Title"
                     value = {this.state.postTitle}
                     onChange={this.onChangeTitle}
+                    required
                   />
                </div>
                <div>
@@ -52,13 +55,14 @@ export class AddPostForm extends Component {
                      placeholder="Description"
                      value={this.state.postDesc}
                      onChange={this.onChangeDesc}
+                     required
                    />
                 </div>
                <div>
                    <button 
-                     onClick={this.createPost} 
+                      
                      className="blackBtn" 
-                     type="button">
+                     type="submit">
                          Add post
                    </button>
                </div>
