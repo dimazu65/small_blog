@@ -1,4 +1,5 @@
 import styles from "./EditPostForm.module.css"
+import mainStyles from "../../../App.module.css"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Component } from "react";
 export class EditPostForm extends Component {
@@ -69,11 +70,12 @@ export class EditPostForm extends Component {
               placeholder="Description"
               value={this.state.postDesc}
               onChange={this.onChangeDesc}
+              rows={8}
               required
             />
           </div>
           <div>
-            <button className={styles.blackBtn} type="submit">
+            <button className={mainStyles.blackBtn} type="submit">
               Update post
             </button>
           </div>

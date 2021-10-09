@@ -1,12 +1,15 @@
 import axios from "axios";
 import { Component } from "react";
-import { postsUrl } from "../../components/sharedData/dataFile"
+import { postsUrl } from "../../components/sharedData/commonFunctions"
 import styles from "./BlogPage.module.css";
 import { AddPostForm } from "./components/AddPostForm";
 import { BlogCard } from "./components/BlogCard";
 import CircularProgress from '@mui/material/CircularProgress';
-import { Opacity } from "@material-ui/icons";
 import { EditPostForm } from "./components/EditPostForm";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBookReader } from '@fortawesome/free-solid-svg-icons'
+
+let source; 
 
 export class BlogPage extends Component {
   state = {
@@ -19,27 +22,36 @@ export class BlogPage extends Component {
 
   // Created simple database on mockapi.io
   // Will update to Firebase later
-  getPosts = () => {
-    this.setState({
-      isPending: true,
-    });
-
+  getPosts () 
+   {
+    
+    source = axios.CancelToken.source();
     axios
-      .get(postsUrl)
+      .get(postsUrl, {cancelToken: source.token})
       .then((response) => {
         this.setState({
           blogArr: response.data,
+          isPending : false,
         });
       })
       .catch((err) => {
         console.log(err);
       });
-    this.setState({
-      isPending: false,
-    });
+    
   };
+  
+  componentDidMount() 
+  {
+    this.getPosts();
+  }
 
-  likePost = (blogPost) => {
+  componentWillUnmount() 
+  {
+    if (source) {source.cancel('Axios "GET" was cancelled');}
+  }
+
+  likePost = (blogPost) =>
+  {
     const temp = { ...blogPost };
     temp.liked = !temp.liked;
 
@@ -57,7 +69,8 @@ export class BlogPage extends Component {
       });
   };
   
-  editBlogPost =(updatedBlogPost) => {
+  editBlogPost = (updatedBlogPost) =>
+  {
     this.setState({
       isPending: true,
     });
@@ -78,7 +91,8 @@ export class BlogPage extends Component {
   
   }
 
-  deletePost = (blogPost) => {
+  deletePost = (blogPost) =>
+  {
     if (window.confirm(`Remove ${blogPost.title} ?`)) {
       axios
         .delete(
@@ -95,7 +109,8 @@ export class BlogPage extends Component {
   };
 
   // добавляю запись в массив после AddPostForm
-  addNewBlogPost = (blogPost) => {
+  addNewBlogPost = (blogPost) =>
+  {
     axios
       .post(postsUrl, blogPost)
       .then((response) => {
@@ -107,45 +122,49 @@ export class BlogPage extends Component {
       });
   };
 
-  triggerShowEditForm = () => {
+  triggerShowEditForm = () =>
+  {
     this.setState({
       showEditForm: true,
     });
   };
-  triggerHideEditForm = () => {
+  triggerHideEditForm = () => 
+  {
     this.setState({
       showEditForm: false,
     });
   };
 
-  triggerShowAddForm = () => {
+  triggerShowAddForm = () => 
+  {
     this.setState({
       showAddForm: true,
     });
   };
 
-  triggerHideAddForm = () => {
+  triggerHideAddForm = () =>
+  {
     this.setState({
       showAddForm: false,
     });
   };
 
-  handleEscape = (e) => {
+  handleEscape (e)
+  {
     if (e.key === "Escape" && this.state.showAddForm) this.triggerHideAddForm();
   };
 
-  handleSelectPost = (blogPost) => {
+  handleSelectPost (blogPost) 
+  {
     this.setState({
        selectedPost:blogPost
     })
   }
 
-  componentDidMount() {
-    this.getPosts();
-   
-  }
+  
 
-  render() {
+  render() 
+  {
     const blogPosts = this.state.blogArr.map((item, pos) => {
       return (
         <BlogCard
@@ -160,6 +179,8 @@ export class BlogPage extends Component {
         />
       );
     });
+
+    if (this.state.blogArr.length === 0) return <h1>Loading data...</h1>;
 
     const postsOpacity = this.state.isPending ? 0.5 : 1
     return (
@@ -179,19 +200,34 @@ export class BlogPage extends Component {
           />
         )}
         <>
-          <h1>Simple Blog</h1>
+          <div>
+            <h1>
+              <FontAwesomeIcon
+                icon={faBookReader}
+                size="1x"
+                className={styles.icon}
+              />
+              Small Blog
+              <FontAwesomeIcon
+                icon={faBookReader}
+                size="1x"
+                className={styles.icon}
+              />
+            </h1>
+          </div>
           <div className={styles.addNewBtn}>
-            <button className={styles.blackBtn} onClick={this.triggerShowAddForm}>
+            <button
+              className={styles.blackBtn}
+              onClick={this.triggerShowAddForm}
+            >
               New post
             </button>
           </div>
-          
-          <div className={styles.posts} style={{opacity:postsOpacity}}>
+
+          <div className={styles.posts} style={{ opacity: postsOpacity }}>
             {blogPosts}
           </div>
-          {
-           this.state.isPending && <CircularProgress className="preloader"/>
-          }
+          {this.state.isPending && <CircularProgress className="preloader" />}
         </>
       </div>
     );

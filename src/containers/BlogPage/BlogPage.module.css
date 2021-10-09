@@ -22,14 +22,7 @@
 .addNewBtn {
   text-align: center;
 }
-.btn {
-    padding: 5px 15px;
-    border-radius: 16px;
-    background-color: black;
-    color: white;
-    transition: .2s;
-  }
-  .blackBtn {
+.blackBtn {
     padding: 5px 15px;
     border-radius: 16px ;
     background-color: black;
@@ -39,4 +32,9 @@
   .blackBtn:hover {
     background-color: rgba(1, 1, 1, 0.5);
     color: black;
+  }
+  .icon {
+    color:rgb(0, 0, 0);
+    margin-right: 15px;
+    margin-left: 15px;
   }
