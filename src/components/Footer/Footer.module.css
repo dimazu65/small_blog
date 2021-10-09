@@ -1,4 +1,4 @@
-footer {
+.footer {
     height: 50px;
     background-color: #393939;
   
@@ -7,14 +7,14 @@ footer {
     justify-content: center;
   }
   
-  footer span {
+.footer span {
     vertical-align: middle;
     font-weight: 400;
     font-size: 18px;
     color: white;
   }
   
-  .btn {
+ .btn {
     background-color: crimson;
   }
   

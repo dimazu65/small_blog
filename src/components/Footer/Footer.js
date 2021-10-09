@@ -1,7 +1,7 @@
-import './Footer.css'
+import styles from './Footer.module.css'
 export const Footer = ({year}) => {
     return (
-    <footer>
+    <footer className={styles.footer}>
      <span> Small Blog (React JS)- {year} </span>
     </footer>
     )

@@ -1,4 +1,4 @@
-import "./BlogCard.css"
+import styles from "./BlogCard.module.css"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -20,8 +20,8 @@ export const BlogCard = ({
         triggerShowEditForm()
     }
     return (
-        <div className="post">
-          <div className="postContent">
+        <div className={styles.post}>
+          <div className={styles.postContent}>
                  <h2>{title}</h2>
             <p>
             {description}
@@ -32,12 +32,12 @@ export const BlogCard = ({
                 </button>
             </div>
          </div>
-         <div className="postControl">
+         <div className={styles.postControl}>
 
-         <button className="editBtn" onClick={showEditForm}> 
+         <button className={styles.editBtn} onClick={showEditForm}> 
                <EditIcon/> 
          </button>
-         <button className="deleteBtn" onClick={deletePost}> 
+         <button className={styles.deleteBtn} onClick={deletePost}> 
                <DeleteForeverIcon/> 
          </button>
          </div>

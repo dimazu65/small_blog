@@ -1,14 +1,14 @@
 import axios from "axios";
 import { Component } from "react";
-//import { posts } from "../sharedData/dataFile"
-import "./BlogContent.css";
+import { postsUrl } from "../../components/sharedData/dataFile"
+import styles from "./BlogPage.module.css";
 import { AddPostForm } from "./components/AddPostForm";
 import { BlogCard } from "./components/BlogCard";
 import CircularProgress from '@mui/material/CircularProgress';
 import { Opacity } from "@material-ui/icons";
 import { EditPostForm } from "./components/EditPostForm";
 
-export class BlogContent extends Component {
+export class BlogPage extends Component {
   state = {
     showAddForm: false,
     showEditForm : false,
@@ -25,7 +25,7 @@ export class BlogContent extends Component {
     });
 
     axios
-      .get("https://615fc6a6f7254d001706820b.mockapi.io/posts")
+      .get(postsUrl)
       .then((response) => {
         this.setState({
           blogArr: response.data,
@@ -45,7 +45,7 @@ export class BlogContent extends Component {
 
     axios
       .put(
-        `https://615fc6a6f7254d001706820b.mockapi.io/posts/${blogPost.id}`,
+        `${postsUrl}${blogPost.id}`,
         temp
       )
       .then((response) => {
@@ -63,7 +63,7 @@ export class BlogContent extends Component {
     });
 
     axios
-      .put(`https://615fc6a6f7254d001706820b.mockapi.io/posts/${updatedBlogPost.id}`, updatedBlogPost)
+      .put(`${postsUrl}${updatedBlogPost.id}`, updatedBlogPost)
       .then((response) => {
        
           this.getPosts();
@@ -82,7 +82,7 @@ export class BlogContent extends Component {
     if (window.confirm(`Remove ${blogPost.title} ?`)) {
       axios
         .delete(
-          `https://615fc6a6f7254d001706820b.mockapi.io/posts/${blogPost.id}`
+          `${postsUrl}${blogPost.id}`
         )
         .then((response) => {
           this.getPosts();
@@ -97,7 +97,7 @@ export class BlogContent extends Component {
   // добавляю запись в массив после AddPostForm
   addNewBlogPost = (blogPost) => {
     axios
-      .post("https://615fc6a6f7254d001706820b.mockapi.io/posts", blogPost)
+      .post(postsUrl, blogPost)
       .then((response) => {
         this.getPosts();
         console.log("Post created", response.data);
@@ -163,7 +163,7 @@ export class BlogContent extends Component {
 
     const postsOpacity = this.state.isPending ? 0.5 : 1
     return (
-      <div className="blogPage">
+      <div className={styles.blogPage}>
         {this.state.showAddForm && (
           <AddPostForm
             blogArr={this.state.blogArr}
@@ -180,13 +180,13 @@ export class BlogContent extends Component {
         )}
         <>
           <h1>Simple Blog</h1>
-          <div className="addNewBtn">
-            <button className="blackBtn" onClick={this.triggerShowAddForm}>
+          <div className={styles.addNewBtn}>
+            <button className={styles.blackBtn} onClick={this.triggerShowAddForm}>
               New post
             </button>
           </div>
           
-          <div className="posts" style={{opacity:postsOpacity}}>
+          <div className={styles.posts} style={{opacity:postsOpacity}}>
             {blogPosts}
           </div>
           {

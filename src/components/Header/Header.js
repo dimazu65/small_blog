@@ -1,7 +1,7 @@
-import './Header.css'
+import styles from './Header.module.css'
 export const Header = () => {
     return (
-        <header>
+        <header className={styles.mainHeader}>
             <nav>
                 <a href="#first">Home</a>
                 <a href="#second">About</a>
