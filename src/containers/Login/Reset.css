@@ -1,0 +1,40 @@
+.reset {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .reset__container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: #dcdcdc;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid black
+
+  }
+  .reset__textBox {
+    font-size: 16px;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px 5px;
+    border-radius: 8px;
+    border: 1px solid rgb(184, 178, 178);
+
+  }
+  .reset__btn {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border: none;
+    color: white;
+    background-color: black;
+    border-radius: 16px;
+    width: 100%;
+
+  }
+  .reset div {
+    margin-top: 7px;
+  }

@@ -1,7 +1,10 @@
 import styles from "./App.module.css";
 import { Header } from "./components/Header/Header";
 import { BlogPage } from "./containers/BlogPage/BlogPage";
-import { LoginPage } from "./containers/LoginPage/LoginPage";
+//import { LoginPage } from "./containers/LoginPage/LoginPage";
+import {Login} from "./containers/Login/Login";
+import {Register} from "./containers/Login/Register";
+import {Reset} from "./containers/Login/Reset";
 import { Footer } from "./components/Footer/Footer";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useState } from "react";
@@ -22,19 +25,10 @@ export function App() {
         />
         <main>
           <Switch>
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <LoginPage
-                  {...props}
-                  setIsLoggedIn={setIsLoggedIn}
-                  setUserName={setUserName}
-                />
-              )}
-            />
-
-            <Route exact path="/blog" component={BlogPage} />
+          <Route exact path="/" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/reset" component={Reset} />
+          <Route exact path="/blog" component={BlogPage} />
             
           </Switch>
         </main>
