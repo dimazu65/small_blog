@@ -1,17 +1,32 @@
 import { NavLink } from 'react-router-dom'
 import styles from './Header.module.css'
-export function Header () 
+import LogoutIcon from '@mui/icons-material/Logout';
+
+export function Header ({isLoggedIn, setIsLoggedIn, userName}) 
 {
+  function handleLogOut()
+  {
+    localStorage.setItem('isLoggedIn', false)
+    setIsLoggedIn(false);
+
+  }
     return (
       <header className={styles.mainHeader}>
-        <nav>
-          <NavLink activeClassName={styles.active} exact to="/">
-            Home
-          </NavLink>
-          <NavLink activeClassName={styles.active} exact to="/login">
-            Login
-          </NavLink>
-        </nav>
+        {isLoggedIn ? (
+          <nav>
+            Welcome, &nbsp; <strong> {userName}</strong> 
+            <NavLink
+              onClick={handleLogOut}
+              exact
+              to="/"
+            >
+              <LogoutIcon />
+              Logout
+            </NavLink>
+          </nav>
+        ) : (
+          "Welcome Anonymous!!"
+        )}
       </header>
     );
 }

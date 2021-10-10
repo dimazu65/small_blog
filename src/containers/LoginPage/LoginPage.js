@@ -1,11 +1,29 @@
+import { useState } from "react"
 import styles from "./LoginPage.module.css"
 
-export function LoginPage (props)
+export function LoginPage  ( {setIsLoggedIn, history, setUserName} ) 
 {
-    function handleLogIn(e)
+    const [login, setLogin] =useState('');
+    const [password, setPassword] =useState('');
+    
+    function handleLoginChange(e)
+    {
+      setLogin (e.target.value) 
+    }
+    
+    function handlePasswordChange(e)
+    {
+      setPassword (e.target.value) 
+    }
+
+    const handleLogIn = (e) =>
     {
       e.preventDefault()
-      props.history.push('/')
+      localStorage.setItem('isLoggedIn', true)
+      localStorage.setItem('userName', login)
+      setUserName(login)
+      setIsLoggedIn(true)
+      history.push('/blog')
     }
     
     return (
@@ -16,6 +34,7 @@ export function LoginPage (props)
             className={styles.loginFormInput}
             type="text"
             placeholder="Login"
+            onChange={handleLoginChange}
             required
           />
         </div>
@@ -24,6 +43,7 @@ export function LoginPage (props)
             className={styles.loginFormInput}
             type="password"
             placeholder="Password"
+            onChange={handlePasswordChange}
             required
           />
         </div>

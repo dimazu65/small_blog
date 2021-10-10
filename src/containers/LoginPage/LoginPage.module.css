@@ -3,7 +3,11 @@
     padding: 20px;
     margin: 0 auto;
     text-align: center;
-    
+    background-color: #dcdcdc;
+    border-radius: 16px;
+    border: 1px solid black
+
+
 }
 
 .loginForm h2 {

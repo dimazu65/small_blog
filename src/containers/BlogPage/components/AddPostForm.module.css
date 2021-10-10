@@ -11,6 +11,11 @@
 
     text-align: center;
     border-radius: 10px;
+    background-color: #dcdcdc;
+    border-radius: 16px;
+    border: 1px solid black
+
+
 }
 
 .hideBtn {
