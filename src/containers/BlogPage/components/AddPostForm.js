@@ -1,51 +1,42 @@
 import styles from "./AddPostForm.module.css"
 import mainStyles from "../../../App.module.css"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { Component } from "react";
-export class AddPostForm extends Component {
-  state = {
-    postTitle: "",
-    postDesc: "",
+import { useEffect, useState } from "react";
+export const AddPostForm = (props) => {
+
+  const [postTitle, setPostTitle] =useState('')
+  const [postDesc, setPostDesc] =useState('')
+    
+  const onChangeTitle = (e) => {
+    setPostTitle(e.target.value)
   };
-  onChangeTitle = (e) => {
-    this.setState({
-      postTitle: e.target.value,
-    });
+  const onChangeDesc = (e) => {
+    setPostDesc(e.target.value)
   };
-  onChangeDesc = (e) => {
-    this.setState({
-      postDesc: e.target.value,
-    });
-  };
-  createPost = (e) => {
+  const createPost = (e) => {
     e.preventDefault();
     const post = {
-      title: this.state.postTitle,
-      description: this.state.postDesc,
+      title: postTitle,
+      description: postDesc,
       liked: false,
     };
 
-    this.props.addNewBlogPost(post);
-    this.props.triggerHideAddForm();
+    props.addNewBlogPost(post);
+    props.triggerHideAddForm();
   };
 
-  handleEscape = (e) => {
-    if (e.key === "Escape") this.props.triggerHideAddForm();
-  };
+  useEffect(()=>{
+    const handleEscape = (e) => {
+      if (e.key === "Escape") props.triggerHideAddForm();
+    };
+    window.addEventListener("keyup", handleEscape);
+    return () => window.removeEventListener("keyup", handleEscape)
+  }, [props])
 
-  componentDidMount() {
-    
-    window.addEventListener("keyup", this.handleEscape);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("keyup", this.handleEscape);
-  }
-  render() {
-    const triggerHideAddForm = this.props.triggerHideAddForm;
+    const triggerHideAddForm = props.triggerHideAddForm;
     return (
       <>
-        <form action="" className={styles.addPostForm} onSubmit={this.createPost}>
+        <form action="" className={styles.addPostForm} onSubmit={createPost}>
           <h2>New post</h2>
           <button className={styles.hideBtn} onClick={triggerHideAddForm}>
             <HighlightOffIcon />
@@ -56,8 +47,8 @@ export class AddPostForm extends Component {
               type="text"
               name="pstTitle"
               placeholder="Title"
-              value={this.state.postTitle}
-              onChange={this.onChangeTitle}
+              value={postTitle}
+              onChange={onChangeTitle}
               required
             />
           </div>
@@ -66,8 +57,8 @@ export class AddPostForm extends Component {
               className={styles.addFormInput}
               name="pstDesc"
               placeholder="Description"
-              value={this.state.postDesc}
-              onChange={this.onChangeDesc}
+              value={postDesc}
+              onChange={onChangeDesc}
               rows={8}
               required
             />
@@ -82,4 +73,3 @@ export class AddPostForm extends Component {
       </>
     );
   }
-}

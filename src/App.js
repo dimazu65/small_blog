@@ -14,7 +14,7 @@ export function App() {
     localStorage.getItem("isLoggedIn") === "true"
   );
 
-  const [userName, setUserName] = useState(localStorage.getItem("userName"));
+ const [userName, setUserName] = useState(localStorage.getItem("userName"));
   return (
     <Router>
       <div className={styles.App}>

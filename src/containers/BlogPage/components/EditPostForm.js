@@ -1,53 +1,46 @@
 import styles from "./EditPostForm.module.css"
 import mainStyles from "../../../App.module.css"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { Component } from "react";
-export class EditPostForm extends Component {
-  state = {
-    postTitle: this.props.selectedPost.title,
-    postDesc: this.props.selectedPost.description,
+import { useState, useEffect } from "react";
+export const EditPostForm = (props)=> {
+  
+  const [postTitle, setPostTitle] =useState(props.selectedPost.title)
+  const [postDesc, setPostDesc] =useState(props.selectedPost.description)
+  
+  const onChangeTitle = (e) => {
+    
+    setPostTitle(e.target.value)
   };
-  onChangeTitle = (e) => {
-    this.setState({
-      postTitle: e.target.value,
-    });
-  };
-  onChangeDesc = (e) => {
-    this.setState({
-      postDesc: e.target.value,
-    });
+  const onChangeDesc = (e) => {
+    setPostDesc(e.target.value)
   };
 
-  savePost = (e) => {
+  const savePost = (e) => {
     e.preventDefault();
     const post = {
-      id: this.props.selectedPost.id,  
-      title: this.state.postTitle,
-      description: this.state.postDesc,
-      liked: this.props.selectedPost.liked
+      id: props.selectedPost.id,  
+      title: postTitle,
+      description: postDesc,
+      liked: props.selectedPost.liked
     }
-    this.props.editBlogPost(post);
-    this.props.triggerHideEditForm();
+    props.editBlogPost(post);
+    props.triggerHideEditForm();
   };
 
-  handleEscape = (e) => {
-    if (e.key === "Escape") this.props.triggerHideEditForm();
-  };
-
-  componentDidMount() {
+ 
+  useEffect(()=>{
+    const handleEscape = (e) => {
+      if (e.key === "Escape") props.triggerHideEditForm();
+    };
     
-    window.addEventListener("keyup", this.handleEscape);
-  }
+    window.addEventListener("keyup", handleEscape)
+    return () => window.removeEventListener("keyup", handleEscape)
+  }, [props])
 
-  componentWillUnmount() {
-    window.removeEventListener("keyup", this.handleEscape);
-  }
-
-  render() {
-    const triggerHideEditForm = this.props.triggerHideEditForm;
+  const triggerHideEditForm = props.triggerHideEditForm;
     return (
       <>
-        <form action="" className={styles.editPostForm} onSubmit={this.savePost}>
+        <form action="" className={styles.editPostForm} onSubmit={savePost}>
           <h2>Edit post</h2>
           <button className={styles.hideBtn} onClick={triggerHideEditForm}>
             <HighlightOffIcon />
@@ -58,8 +51,8 @@ export class EditPostForm extends Component {
               type="text"
               name="pstTitle"
               placeholder="Title"
-              value={this.state.postTitle}
-              onChange={this.onChangeTitle}
+              value={postTitle}
+              onChange={onChangeTitle}
               required
             />
           </div>
@@ -68,8 +61,8 @@ export class EditPostForm extends Component {
               className={styles.editFormInput}
               name="pstDesc"
               placeholder="Description"
-              value={this.state.postDesc}
-              onChange={this.onChangeDesc}
+              value={postDesc}
+              onChange={onChangeDesc}
               rows={8}
               required
             />
@@ -84,4 +77,3 @@ export class EditPostForm extends Component {
       </>
     );
   }
-}
