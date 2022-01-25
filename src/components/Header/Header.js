@@ -50,7 +50,7 @@ export function Header ()
           </nav>)
         : (
           <nav>
-          "Welcome Anonymous!!"
+          Welcome Anonymous!!
           </nav>
         )}
 

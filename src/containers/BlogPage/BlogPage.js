@@ -40,12 +40,12 @@ export const BlogPage = (props) => {
     [],
   )  
   useEffect(()=>{
-    const willBroke= ()=>{
+    const willBrake= ()=>{
       if (source) {source.cancel('Axios "GET" was cancelled')};
     }
    
     getPosts()
-    return ()=>willBroke()   
+    return ()=>willBrake()   
   }, [getPosts])
 
   
